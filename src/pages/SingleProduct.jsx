@@ -25,7 +25,7 @@ import { store } from "../store";
 export const singleProductLoader = async ({ params }) => {
   const { id } = params;
 
-  const response = await axios(`http://localhost:8080/products/${id}`);
+  const response = await axios(`/api/products/${id}`);
 
   return { productData: response.data };
 };
@@ -69,7 +69,7 @@ const SingleProduct = () => {
   const addToWishlistHandler = async (product) => {
     try {
       const getResponse = await axios.get(
-        `http://localhost:8080/user/${localStorage.getItem("id")}`
+        `/api/user/${localStorage.getItem("id")}`
       );
       const userObj = getResponse.data;
 
@@ -79,7 +79,7 @@ const SingleProduct = () => {
       userObj.userWishlist.push(product);
 
       const postResponse = await axios.put(
-        `http://localhost:8080/user/${localStorage.getItem("id")}`,
+        `/api/user/${localStorage.getItem("id")}`,
         userObj
       );
 
@@ -93,7 +93,7 @@ const SingleProduct = () => {
 
   const removeFromWishlistHandler = async (product) => {
     const getResponse = await axios.get(
-      `http://localhost:8080/user/${localStorage.getItem("id")}`
+      `/api/user/${localStorage.getItem("id")}`
     );
     const userObj = getResponse.data;
 
@@ -106,7 +106,7 @@ const SingleProduct = () => {
     userObj.userWishlist = newWishlist;
 
     const postResponse = await axios.put(
-      `http://localhost:8080/user/${localStorage.getItem("id")}`,
+      `/api/user/${localStorage.getItem("id")}`,
       userObj
     );
 
@@ -121,7 +121,7 @@ const SingleProduct = () => {
       <div className="grid grid-cols-2 max-w-7xl mx-auto mt-5 max-lg:grid-cols-1 max-lg:mx-5">
         <div className="product-images flex flex-col justify-center max-lg:justify-start">
           <img
-            src={`https://${productData?.additionalImageUrls[currentImage]}`}
+            src={productData?.additionalImageUrls[currentImage]}
             className="w-96 text-center border border-gray-600 cursor-pointer"
             alt={productData.name}
           />
@@ -143,7 +143,7 @@ const SingleProduct = () => {
           </h2>
           <SingleProductRating rating={rating} productData={productData} />
           <p className="text-3xl text-error">
-            ${productData?.price?.current?.value}
+            {productData?.price?.current?.text}
           </p>
           <div className="text-xl max-sm:text-lg text-accent-content">
             {parse(productData?.description)}
